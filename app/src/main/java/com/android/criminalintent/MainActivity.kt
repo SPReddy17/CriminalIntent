@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity(),CrimeListFragment.Callbacks {
 
             progressBar.visibility = View.VISIBLE
 
-            Handler().postDelayed(Runnable { showFragment()}, 1000)
+            Handler().postDelayed(Runnable { showFragment()}, 500)
 
 
         }
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity(),CrimeListFragment.Callbacks {
 
     override fun onCrimeSelected(crimeId: UUID) {
         Log.d(TAG, "onCrimeSelected: $crimeId")
-        val fragment = CrimeFragment()
+        val fragment = CrimeFragment.newInstance(crimeId)
         supportFragmentManager
             .beginTransaction()
             .setCustomAnimations(
