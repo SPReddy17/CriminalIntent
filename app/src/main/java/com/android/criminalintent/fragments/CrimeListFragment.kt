@@ -1,5 +1,6 @@
 package com.android.criminalintent.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,11 +17,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.criminalintent.R
 import com.android.criminalintent.model.Crime
 import com.android.criminalintent.viewmodels.CrimeListViewModel
+import java.util.*
 
-    private const val TAG = "CrimeListFragment"
+private const val TAG = "CrimeListFragment"
 
 
 class CrimeListFragment : Fragment(){
+
+
+    /**
+     * Required interface for hosting activities
+     */
+    interface Callbacks{
+        fun onCrimeSelected(crimeId : UUID)
+    }
+
+    private var callbacks : Callbacks? = null
 
     private lateinit var crimeRecyclerView : RecyclerView
 
@@ -30,6 +42,15 @@ class CrimeListFragment : Fragment(){
         ViewModelProviders.of(this).get(CrimeListViewModel::class.java)
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callbacks = context as Callbacks?
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callbacks = null
+    }
 
     // companion object is used to access the members or  objects instance without having instance of the class
     companion object{
@@ -96,6 +117,7 @@ class CrimeListFragment : Fragment(){
 
         override fun onClick(v: View) {
             Toast.makeText(context,"${crime.title} pressed!",Toast.LENGTH_SHORT).show()
+            callbacks?.onCrimeSelected(crimeId = crime.id)
         }
 
     }

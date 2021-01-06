@@ -2,14 +2,16 @@ package com.android.criminalintent
 
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.android.criminalintent.fragments.CrimeFragment
 import com.android.criminalintent.fragments.CrimeListFragment
+import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),CrimeListFragment.Callbacks {
 
     private  val TAG = "MainActivity"
 
@@ -33,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
             progressBar.visibility = View.VISIBLE
 
-            Handler().postDelayed(Runnable { showFragment()}, 1500)
+            Handler().postDelayed(Runnable { showFragment()}, 1000)
 
 
         }
@@ -52,6 +54,13 @@ class MainActivity : AppCompatActivity() {
             val fragment  = CrimeListFragment.newInstance()
             supportFragmentManager
                 .beginTransaction()
+                .setCustomAnimations(
+                    R.anim.slide_in_right,  // enter
+                    R.anim.fade_out,  // exit
+                    R.anim.fade_in,   // popEnter
+                    R.anim.slide_out_right  // popExit
+
+                )
                 .add(R.id.fragment_container,fragment)
                 .commit()
         }
@@ -59,6 +68,24 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onCrimeSelected(crimeId: UUID) {
+        Log.d(TAG, "onCrimeSelected: $crimeId")
+        val fragment = CrimeFragment()
+        supportFragmentManager
+            .beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_in_right,  // enter
+                R.anim.fade_out,  // exit
+                R.anim.fade_in,   // popEnter
+                R.anim.slide_out_right  // popExit
+
+            )
+            .replace(R.id.fragment_container,fragment)
+            .addToBackStack(null)
+            .commit()
+    }
 
 
 }
+
+
