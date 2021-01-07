@@ -37,18 +37,16 @@ class MainActivity : AppCompatActivity(),CrimeListFragment.Callbacks {
 
             Handler().postDelayed(Runnable { showFragment()}, 500)
 
-
         }
 
     }
 
 
-
+    // to display the crime fragment
+    private val currentFragment =
+        supportFragmentManager.findFragmentById(R.id.fragment_container)
     private fun showFragment(){
 
-        // to display the crime fragment
-        val currentFragment =
-            supportFragmentManager.findFragmentById(R.id.fragment_container)
 
         if(currentFragment == null){
             val fragment  = CrimeListFragment.newInstance()
@@ -62,9 +60,20 @@ class MainActivity : AppCompatActivity(),CrimeListFragment.Callbacks {
 
                 )
                 .add(R.id.fragment_container,fragment)
+                .addToBackStack(null)
                 .commit()
         }
         progressBar.visibility =View.GONE
+
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if ( currentFragment==supportFragmentManager.findFragmentById(R.id.fragment_container)) {
+
+                appTitle.visibility = View.VISIBLE
+
+        }
 
     }
 

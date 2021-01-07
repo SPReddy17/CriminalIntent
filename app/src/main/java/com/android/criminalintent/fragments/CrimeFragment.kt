@@ -20,8 +20,14 @@ import java.util.*
 import java.util.Observer as Observer
 
 private const val TAG = "CrimeFragment"
+
 private const val ARG_CRIME_ID = "crime_id"
-class CrimeFragment : Fragment(){
+
+private const val DIALOG_DATE= "DialogDate"
+
+private const val REQUEST_DATE = 0
+
+class CrimeFragment : Fragment(),DatePickerFragment.Callbacks{
 
     private lateinit var crime : Crime
 
@@ -57,14 +63,6 @@ class CrimeFragment : Fragment(){
 
         dateButton = view.findViewById(R.id.crime_date) as Button
 
-        dateButton.apply {
-
-            text = crime.date.toString()
-
-            // disabling the button to  ensure it does not respond to users click...
-            isEnabled = false
-
-        }
 
         solvedCheckBox = view.findViewById(R.id.crime_solved) as CheckBox
 
@@ -118,6 +116,13 @@ class CrimeFragment : Fragment(){
             }
         }
 
+        dateButton.setOnClickListener {
+            DatePickerFragment.newInstance(crime.date).apply {
+                setTargetFragment(this@CrimeFragment, REQUEST_DATE)
+                show(this@CrimeFragment.requireFragmentManager(), DIALOG_DATE)
+            }
+        }
+
     }
 
     companion object{
@@ -135,5 +140,11 @@ class CrimeFragment : Fragment(){
         super.onStop()
         crimeDetailViewModel.saveCrime(crime)
     }
+
+    override fun onDateSelected(date: Date) {
+        crime.date = date
+        updateUI()
+    }
+
 }
 
