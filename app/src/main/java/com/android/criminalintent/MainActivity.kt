@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +16,9 @@ class MainActivity : AppCompatActivity(),CrimeListFragment.Callbacks {
 
     private  val TAG = "MainActivity"
 
-    private lateinit var appTitle : TextView
+
+    private lateinit var nextImage : ImageView
+    private lateinit var appTitle :TextView
 
     private lateinit var progressBar : ProgressBar
 
@@ -23,16 +26,17 @@ class MainActivity : AppCompatActivity(),CrimeListFragment.Callbacks {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        nextImage = findViewById(R.id.moveToFragment) as ImageView
         appTitle = findViewById(R.id.app_title) as TextView
-
         progressBar = findViewById(R.id.progress_bar)
 
-        appTitle.setOnClickListener{ view ->
+        nextImage.setOnClickListener{ view ->
 
             // hide the text in main activity layout..
 
             appTitle.visibility = View.GONE
 
+            nextImage.visibility = View.GONE
             progressBar.visibility = View.VISIBLE
 
             Handler().postDelayed(Runnable { showFragment()}, 500)
@@ -70,9 +74,8 @@ class MainActivity : AppCompatActivity(),CrimeListFragment.Callbacks {
     override fun onBackPressed() {
         super.onBackPressed()
         if ( currentFragment==supportFragmentManager.findFragmentById(R.id.fragment_container)) {
-
-                appTitle.visibility = View.VISIBLE
-
+            nextImage.visibility = View.VISIBLE
+            appTitle.visibility = View.VISIBLE
         }
 
     }
@@ -93,8 +96,6 @@ class MainActivity : AppCompatActivity(),CrimeListFragment.Callbacks {
             .addToBackStack(null)
             .commit()
     }
-
-
 }
 
 
